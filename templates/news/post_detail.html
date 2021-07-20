@@ -1,0 +1,32 @@
+<!-- templates/post_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}Post Detail{% endblock %} 
+
+{% block content %}
+    {{ post.title|linebreaks }}
+    Publié le {{ post.published_date }} par {{ post.author.name }}
+    {{ post.content|linebreaks }}
+    <br><hr class="content-separator"></hr>
+		{% if user.is_authenticated %}
+	      <form method="post" style="margin-top: 1.3em;">
+              {{ form.as_p }}
+              {% csrf_token %}
+            <button type="submit" class="">Ecrire un commentaire</button>
+          </form>
+	    {% else %}
+	    <a href="{% url 'login' %}">Pour rédiger un commentaire sur cet article, identifiez vous</a>
+        {% endif %}
+        <br><br>{% if not post.comments.all %} Aucun commentaire
+	            {% else %}
+                  {% with post.comments.count as total_comments %} {{ total_comments }} commentaire{{ total_comments|pluralize }}
+	              {% endwith %}
+                    {% for comment in post.comments.all %}
+                       <br><br>{{ comment.name }}
+                       le {{ comment.created_on }}
+                       <br><br>{{ comment.body }}
+                   {% endfor %}
+	           {% endif %}
+
+        
+{% endblock %}  

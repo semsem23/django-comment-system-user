@@ -1,0 +1,20 @@
+
+{% block title %}{% endblock %}
+ 
+{% block content %}
+ {% for Post in post %}
+   {{ Post.title| linebreaks }}
+   Publié le {{ Post.published_date }} par {{ Post.author.name }}
+   {{ Post.description| linebreaks }}
+   <a href="{{ Post.get_absolute_url }}" class="more">Lire la suite &#187;</a>
+   <hr class="content-separator"></hr>
+ {% endfor %}
+ {% if user.is_authenticated %}
+  Bonjour {{ user.email }}!
+  <p><a href="{% url 'logout' %}">Deconnexion</a></p>
+{% else %}
+  <a href="{% url 'login' %}">Connexion</a>
+  <a href="{% url 'signup' %}">Inscription</a>
+{% endif %}
+{% endblock %}
+
